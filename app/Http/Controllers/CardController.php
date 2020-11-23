@@ -33,29 +33,20 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        // $cards = Cards::all();
         $equipments = Equipments::all();
         $hangars = Hangars::all();
-
-        $modules = Equipments::find(1)->modules;
-
-        // foreach ($modules as $key => $value) {
-        //     $modules = Modules::all();
-        // }
-        // $modules = $modules->equipmens();
-
-        // return $modules;
+        $modules = Equipments::find($id)->modules;
+        $modules_count = count($modules);
 
         return view(
-            'cards.card_create'. $equipments->id,
+            'cards.card_create',
             [
-                // 'cards' => $cards,
                 'equipments' => $equipments,
                 'hangars' => $hangars,
                 'modules' => $modules,
-
+                'modules_count' => $modules_count,
             ]
         );
     }
@@ -68,9 +59,6 @@ class CardController extends Controller
      */
     public function store(Request $request)
     {
-
-        return $request;
-
         $card = new Cards;
         $card->inventory_number = $request->input('inventory_number');
         $card->nomenclature_number = $request->input('nomenclature_number');
@@ -78,27 +66,21 @@ class CardController extends Controller
         $card->hangars_id = $request->input('hangars_id');
         $card->save();
 
-        $modules = new ModulesInfo;
+        $sch = $request->input('modules_count');
+        $sch--;
+        for ($i = 0; $i <= $sch; $i++) {
+            $modules = new ModulesInfo(
+                [
+                    'cards_id' => $card->id,
+                    'modules_id' => $request->input('modules_' . $i),
+                    'photo' => $request->input('photo_' . $i),
+                    'description' => $request->input('description_' . $i),
+                ]
+            );
+            $modules->save();
+        }
 
-        // foreach ($request as $key => $value) {
-        //     $modules->cards_id = $card->id;
-        //     $modules->modules_id = $request->input('modules_id');
-        //     $modules->photo = $request->input('photo');
-        //     $modules->description = $request->input('description');
-        //     $modules->save();
-        // }
-
-        // for ($i=1; $i < ; $i++) { 
-        //     $modules->cards_id = $card->id;
-        //     $modules->modules_id = $request->input('modules_' . $i);
-        //     $modules->photo = $request->input('photo_' . $i);
-        //     $modules->description = $request->input('description_' . $i);
-        //     $modules->save();
-        // }
-
-        // $models->cards_id = $card->id;
-
-        // return redirect('/cards');
+        return redirect('/cards');
     }
 
     /**

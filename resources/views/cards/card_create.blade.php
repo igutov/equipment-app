@@ -7,18 +7,29 @@
                 <div class="card">
                     <div class="card-header">Форма создания карточки:</div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('cards_store') }}">
+                        <form method="POST" action="{{ route('card_store') }}">
                             @csrf
 
                             <div class="form-group">
-                                <label for="equipments">Наименование оборудования:</label>
-                                <select name="equipments_id" id="equipments" class="form-control">
-                                    @forelse ($equipments as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @empty
-                                        <option value="">Не найдено</option>
-                                    @endforelse
-                                </select>
+                                {{-- <label for="equipments">Наименование
+                                    оборудования:</label> --}}
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                                        id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        Наименование оборудования
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        @forelse ($equipments as $item)
+                                            <input type="hidden" name="equipments_id" value="{{ $item->id }}">
+                                            <a class="dropdown-item"
+                                                href="{{ route('card_create', $item->id, $modules_count) }}">{{ $item->name }}</a>
+                                        @empty
+                                            <p>Не найдено</p>
+                                        @endforelse
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="hangars">Номер цеха:</label>
@@ -43,35 +54,22 @@
 
                             <div id="data_input_modules">
                                 @forelse ($modules as $item)
+                                    <input type="hidden" name="modules_count" value="{{ $loop->count }}">
                                     @include('cards.input_module')
                                 @empty
                                     <p>Модулей не обнаружено</p>
                                 @endforelse
                             </div>
 
-                            <button type="reset">Очистить поля</button>
-                            <button type="submit">Создать карточку</button>
+                            {{-- <input type="hidden" name="modules_count"
+                                value="{{ $loop->count }}"> --}}
+
+                            <button type="reset" class="btn btn-danger">Очистить поля</button>
+                            <button type="submit" class="btn btn-primary">Создать карточку</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            $('#equipments').change(function() {
-                $.ajax({
-                    method: 'GET',
-                    url: '/cards/create',
-                    dataType: "text",
-                    success: function(data) {
-                        $('#data_input_modules').html(data);
-                        // console.log(result);
-                    }
-                });
-            });
-        });
-
-    </script>
 @endsection

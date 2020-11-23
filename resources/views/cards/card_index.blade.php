@@ -7,18 +7,25 @@
                 <div class="card">
                     <div class="card-header">Список карточек:</div>
 
-
                     <div class="card-body">
                         <form method="POST" action="">
                             @csrf
 
-                            <ul class="list-group">
+                            <div class="list-group">
                                 @forelse ($cards as $item)
-                                    <li class="list-group-item">{{ $item->name }}</li>
+                                    <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">List group item heading</h5>
+                                            <small>{{ $item->created_at }}</small>
+                                        </div>
+                                        <p class="mb-1">Номенклатурный номер: {{ $item->nomenclature_number }}</p>
+                                        <p class="mb-1">Инвентарный номер: {{ $item->inventory_number }}</p>
+                                        {{-- <small>{{ $item->created_at }}</small> --}}
+                                    </a>
                                 @empty
-                                    <li class="list-group-item">Не найдено</li>
+                                    <p>Не найдено</p>
                                 @endforelse
-                            </ul>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -10,4 +10,6 @@ class ModulesInfo extends Model
     use HasFactory;
 
     protected $table = 'modules_info';
+
+    protected $fillable = array('cards_id', 'modules_id', 'photo', 'description');
 }
