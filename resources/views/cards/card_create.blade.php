@@ -7,12 +7,10 @@
                 <div class="card">
                     <div class="card-header">Форма создания карточки:</div>
                     <div class="card-body">
-                        <form method="POST" action="{{ route('card_store') }}">
+                        <form method="POST" action="{{ route('card_store') }}" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-group">
-                                {{-- <label for="equipments">Наименование
-                                    оборудования:</label> --}}
                                 <div class="dropdown show">
                                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
                                         id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
@@ -31,6 +29,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="hangars">Номер цеха:</label>
                                 <select name="hangars_id" id="hangars" class="form-control">
@@ -41,6 +40,7 @@
                                     @endforelse
                                 </select>
                             </div>
+
                             <div class="form-row">
                                 <div class="form-group col-md-6"><label for="inventory">Инвентарный номер</label> <input
                                         type="text" id="inventory" name="inventory_number" placeholder="Инвентарный номер"
@@ -60,9 +60,6 @@
                                     <p>Модулей не обнаружено</p>
                                 @endforelse
                             </div>
-
-                            {{-- <input type="hidden" name="modules_count"
-                                value="{{ $loop->count }}"> --}}
 
                             <button type="reset" class="btn btn-danger">Очистить поля</button>
                             <button type="submit" class="btn btn-primary">Создать карточку</button>

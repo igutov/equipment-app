@@ -34,7 +34,9 @@ Route::group(['prefix' => 'hangars'], function () {
 
 Route::group(['prefix' => 'cards'], function () {
     Route::get('/', [App\Http\Controllers\CardController::class, 'index']);
-    Route::get('/create/{id}', [App\Http\Controllers\CardController::class, 'create'])->name('card_create');
+
+    Route::pattern('id', '[0-9]+');
+    Route::get('/create/{id?}', [App\Http\Controllers\CardController::class, 'create'])->name('card_create');
     Route::post('/store', [App\Http\Controllers\CardController::class, 'store'])->name('card_store');
     // Route::get('/create', [App\Http\Controllers\EquipmentController::class, 'create'])->name('create');
 });

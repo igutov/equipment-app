@@ -33,7 +33,7 @@ class CardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($id = 1)
     {
         $equipments = Equipments::all();
         $hangars = Hangars::all();
@@ -69,11 +69,26 @@ class CardController extends Controller
         $sch = $request->input('modules_count');
         $sch--;
         for ($i = 0; $i <= $sch; $i++) {
+
+            if ($request->hasFile('photo_' . $i)) {
+                // Имя и расширение файла
+                $filenameWithExt = $request->file('photo_' . $i)->getClientOriginalName();
+                // Только оригинальное имя файла
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Расширение
+                $extention = $request->file('photo_' . $i)->getClientOriginalExtension();
+                // Путь для сохранения
+                $fileNameToStore = "photos/" . $filename . "_" . time() . "." . $extention;
+                // Сохраняем файл
+                $path = $request->file('photo_' . $i)->storeAs('public/', $fileNameToStore);
+            }
+
             $modules = new ModulesInfo(
                 [
                     'cards_id' => $card->id,
                     'modules_id' => $request->input('modules_' . $i),
-                    'photo' => $request->input('photo_' . $i),
+                    // 'photo' => $request->input('photo_' . $i),
+                    'photo' => empty($fileNameToStore) ? null : $fileNameToStore,
                     'description' => $request->input('description_' . $i),
                 ]
             );
